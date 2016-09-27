@@ -1,0 +1,44 @@
+#pragma once
+
+// GLOBALS //
+
+cbuffer MatrixBuffer
+{
+	matrix worldMatrix;
+	matrix viewMatrix;
+	matrix projectionMatrix;
+};
+
+// TYPEDEFS //
+
+struct VertexInputType
+{
+	float position : POSITION;
+	float color : COLOR;
+};
+
+struct PixelInputType
+{
+	float position : SV_POSITION;
+	float color : COLOR;
+};
+
+// Vertex Shader
+
+PixelInputType ColorVertexShader(VertexInputType input)
+{
+	PixelInputType output;
+
+	// Change the position vector to be 4 units for the proper matrix calculations.
+	input.position.w = 1.0f;
+
+	// Calculate the position of the vertex against the world, view, and projection matrices.
+	output.position = mul(input.position, worldMatrix);
+	output.position = mul(output.position, viewMatrix);
+	output.position = mul(output.position, projectionMatrix);
+
+	// Store the input color for the pixel shader to use.
+	output.color = input.color;
+
+	return output;
+}
