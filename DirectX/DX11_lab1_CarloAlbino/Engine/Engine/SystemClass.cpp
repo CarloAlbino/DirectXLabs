@@ -216,7 +216,7 @@ void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
 
 		// Place the window in the middle of the screen.
 		posX = (GetSystemMetrics(SM_CXSCREEN) - screenWidth) / 2;
-		posY = (GetSystemMetrics(SM_CXSCREEN) - screenHeight) / 2;
+		posY = (GetSystemMetrics(SM_CYSCREEN) - screenHeight) / 2;
 	}
 
 	// Create the window with the screen settings and get the handle to it.

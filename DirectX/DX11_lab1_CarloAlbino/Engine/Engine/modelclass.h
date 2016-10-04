@@ -4,8 +4,8 @@
 #define _MODELCLASS_H_
 
 // INCLUDES //
-#include <D3D11.h>
-#include <D3DX10math.h>
+#include <d3d11.h>
+#include <d3dx10math.h>
 
 class ModelClass
 {
