@@ -1,5 +1,3 @@
-#pragma once
-
 // GLOBALS //
 
 cbuffer MatrixBuffer
@@ -13,14 +11,14 @@ cbuffer MatrixBuffer
 
 struct VertexInputType
 {
-	float position : POSITION;
-	float color : COLOR;
+	float4 position : POSITION;
+	float4 color : COLOR;
 };
 
 struct PixelInputType
 {
-	float position : SV_POSITION;
-	float color : COLOR;
+	float4 position : SV_POSITION;
+	float4 color : COLOR;
 };
 
 // Vertex Shader
@@ -28,6 +26,7 @@ struct PixelInputType
 PixelInputType ColorVertexShader(VertexInputType input)
 {
 	PixelInputType output;
+
 
 	// Change the position vector to be 4 units for the proper matrix calculations.
 	input.position.w = 1.0f;

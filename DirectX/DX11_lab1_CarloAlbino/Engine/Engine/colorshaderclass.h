@@ -43,6 +43,5 @@ private:
 	ID3D11InputLayout* m_layout;
 	ID3D11Buffer* m_matrixBuffer;
 };
-};
 
 #endif // ! _COLORSHADERCLASS_H_
