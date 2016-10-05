@@ -6,7 +6,7 @@ ModelClass::ModelClass()
 	m_indexBuffer = 0;
 }
 
-ModelClass::ModelClass(const ModelClass &other)
+ModelClass::ModelClass(const ModelClass& other)
 {
 }
 
@@ -92,9 +92,9 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	indices[1] = 1; // Top middle.
 	indices[2] = 2; // Bottom right.
 
-					// Set up the description of the static vertex buffer.
+	// Set up the description of the static vertex buffer.
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	vertexBufferDesc.ByteWidth = sizeof(VertexType) * m_vertexCount;
+	vertexBufferDesc.ByteWidth = sizeof(VertexType)*m_vertexCount;
 	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	vertexBufferDesc.CPUAccessFlags = 0;
 	vertexBufferDesc.MiscFlags = 0;
@@ -171,9 +171,12 @@ void ModelClass::RenderBuffers(ID3D11DeviceContext* deviceContext)
 	offset = 0;
 
 	// Set the vertex buffer to active in the input assembler so it can be rendered.
+	deviceContext->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
+
+	// Set the index buffer to active in the input assembler so it can be rendered.
 	deviceContext->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
-	// Set the type of primitive that should be rendered from this vertex, in this case triangles.
+	// Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	return;
