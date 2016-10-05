@@ -1,4 +1,8 @@
+////////////////////////////////////////////////////////////////////////////////
+// Filename: colorshaderclass.cpp
+////////////////////////////////////////////////////////////////////////////////
 #include "colorshaderclass.h"
+
 
 ColorShaderClass::ColorShaderClass()
 {
@@ -8,13 +12,16 @@ ColorShaderClass::ColorShaderClass()
 	m_matrixBuffer = 0;
 }
 
+
 ColorShaderClass::ColorShaderClass(const ColorShaderClass& other)
 {
 }
 
+
 ColorShaderClass::~ColorShaderClass()
 {
 }
+
 
 bool ColorShaderClass::Initialize(ID3D11Device* device, HWND hwnd)
 {
@@ -22,7 +29,7 @@ bool ColorShaderClass::Initialize(ID3D11Device* device, HWND hwnd)
 
 
 	// Initialize the vertex and pixel shaders.
-	result = InitializeShader(device, hwnd, L"../Engine/color.vs", L"../Engine/color.ps");	// Carlo NOTE: May have to change this to the proper folders.
+	result = InitializeShader(device, hwnd, L"../Engine/color.vs", L"../Engine/color.ps");
 	if (!result)
 	{
 		return false;
@@ -30,6 +37,7 @@ bool ColorShaderClass::Initialize(ID3D11Device* device, HWND hwnd)
 
 	return true;
 }
+
 
 void ColorShaderClass::Shutdown()
 {
@@ -39,8 +47,9 @@ void ColorShaderClass::Shutdown()
 	return;
 }
 
-bool ColorShaderClass::Render(ID3D11DeviceContext* deviceContext, int indexCount, D3DXMATRIX worldMatrix,
-	D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix)
+
+bool ColorShaderClass::Render(ID3D11DeviceContext* deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix,
+	D3DXMATRIX projectionMatrix)
 {
 	bool result;
 
@@ -58,6 +67,7 @@ bool ColorShaderClass::Render(ID3D11DeviceContext* deviceContext, int indexCount
 	return true;
 }
 
+
 bool ColorShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* vsFilename, WCHAR* psFilename)
 {
 	HRESULT result;
@@ -68,7 +78,8 @@ bool ColorShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* 
 	unsigned int numElements;
 	D3D11_BUFFER_DESC matrixBufferDesc;
 
-	// initialize the pointers this function will ise to null.
+
+	// Initialize the pointers this function will use to null.
 	errorMessage = 0;
 	vertexShaderBuffer = 0;
 	pixelShaderBuffer = 0;
@@ -83,7 +94,7 @@ bool ColorShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* 
 		{
 			OutputShaderErrorMessage(errorMessage, hwnd, vsFilename);
 		}
-		// If there was nothing in the error message then it simply could not find the shader file itself.
+		// If there was  nothing in the error message then it simply could not find the shader file itself.
 		else
 		{
 			MessageBox(hwnd, vsFilename, L"Missing Shader File", MB_OK);
@@ -102,7 +113,7 @@ bool ColorShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* 
 		{
 			OutputShaderErrorMessage(errorMessage, hwnd, psFilename);
 		}
-		// If there was  nothing in the error message then it simply could not find the file itself.
+		// If there was nothing in the error message then it simply could not find the file itself.
 		else
 		{
 			MessageBox(hwnd, psFilename, L"Missing Shader File", MB_OK);
@@ -125,7 +136,7 @@ bool ColorShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* 
 		return false;
 	}
 
-	// Now setup the layout of the data that goes into the shader.
+	// Create the vertex input layout description.
 	// This setup needs to match the VertexType stucture in the ModelClass and in the shader.
 	polygonLayout[0].SemanticName = "POSITION";
 	polygonLayout[0].SemanticIndex = 0;
@@ -179,6 +190,7 @@ bool ColorShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* 
 	return true;
 }
 
+
 void ColorShaderClass::ShutdownShader()
 {
 	// Release the matrix constant buffer.
@@ -188,7 +200,7 @@ void ColorShaderClass::ShutdownShader()
 		m_matrixBuffer = 0;
 	}
 
-	// Release the layout
+	// Release the layout.
 	if (m_layout)
 	{
 		m_layout->Release();
@@ -210,8 +222,8 @@ void ColorShaderClass::ShutdownShader()
 	}
 
 	return;
-
 }
+
 
 void ColorShaderClass::OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND hwnd, WCHAR* shaderFilename)
 {
@@ -248,12 +260,15 @@ void ColorShaderClass::OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND h
 	return;
 }
 
-bool ColorShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix)
+
+bool ColorShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix,
+	D3DXMATRIX projectionMatrix)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	MatrixBufferType* dataPtr;
 	unsigned int bufferNumber;
+
 
 	// Transpose the matrices to prepare them for the shader.
 	D3DXMatrixTranspose(&worldMatrix, &worldMatrix);
@@ -286,6 +301,7 @@ bool ColorShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContext, D
 
 	return true;
 }
+
 
 void ColorShaderClass::RenderShader(ID3D11DeviceContext* deviceContext, int indexCount)
 {
