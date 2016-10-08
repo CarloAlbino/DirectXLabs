@@ -50,7 +50,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	}
 
 	// Initialize the model object.
-	result = m_Model->Initialize(m_D3D->GetDevice(), L"../Engine/data/seafloor.dds");	// CARLO NOTE: texture file name
+	result = m_Model->Initialize(m_D3D->GetDevice(), L"../Engine/data/eye.dds");	// CARLO NOTE: texture file name
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
