@@ -7,6 +7,8 @@
 #include "modelclass.h"
 #include "lightshaderclass.h"
 #include "lightclass.h"
+#include "bitmapclass.h"
+#include "textureshaderclass.h"
 
 // GLOBALS //
 const bool FULL_SCREEN = false;
@@ -34,6 +36,8 @@ private:
 	ModelClass* m_Model;
 	LightShaderClass* m_LightShader;
 	LightClass* m_Light;
+	TextureShaderClass* m_TextureShader;
+	BitmapClass* m_Bitmap;
 };
 
 #endif
