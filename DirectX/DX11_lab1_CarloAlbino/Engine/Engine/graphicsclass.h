@@ -9,6 +9,7 @@
 #include "lightclass.h"
 #include "bitmapclass.h"
 #include "textureshaderclass.h"
+#include "textclass.h"
 
 // GLOBALS //
 const bool FULL_SCREEN = false;
@@ -38,6 +39,7 @@ private:
 	LightClass* m_Light;
 	TextureShaderClass* m_TextureShader;
 	BitmapClass* m_Bitmap;
+	TextClass* m_Text;
 };
 
 #endif
