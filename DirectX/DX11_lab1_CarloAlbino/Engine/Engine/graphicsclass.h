@@ -4,12 +4,12 @@
 
 #include "d3dclass.h"
 #include "cameraclass.h"
+#include "textclass.h"
 #include "modelclass.h"
 #include "lightshaderclass.h"
 #include "lightclass.h"
-#include "bitmapclass.h"
-#include "textureshaderclass.h"
-#include "textclass.h"
+#include "modellistclass.h"
+#include "frustumclass.h"
 
 // GLOBALS //
 const bool FULL_SCREEN = false;
@@ -26,20 +26,18 @@ public:
 
 	bool Initialize(int, int, HWND);
 	void Shutdown();
-	bool Frame();
-
-private:
-	bool Render(float);
+	bool Frame(float);	
+	bool Render();		
 
 private:
 	D3DClass* m_D3D;
 	CameraClass* m_Camera;
+	TextClass* m_Text;
 	ModelClass* m_Model;
 	LightShaderClass* m_LightShader;
 	LightClass* m_Light;
-	TextureShaderClass* m_TextureShader;
-	BitmapClass* m_Bitmap;
-	TextClass* m_Text;
+	ModelListClass* m_ModelList;
+	FrustumClass* m_Frustum;
 };
 
 #endif

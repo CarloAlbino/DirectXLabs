@@ -4,6 +4,8 @@ SystemClass::SystemClass()
 {
 	m_Input = 0;
 	m_Graphics = 0;
+	m_Timer = 0;
+	m_Position = 0;
 }
 
 SystemClass::SystemClass(const SystemClass& other) {}
@@ -29,7 +31,12 @@ bool SystemClass::Initialize()
 	}
 
 	// Initialize the input object.
-	m_Input->Initialize();
+	result = m_Input->Initialize(m_hinstance, m_hwnd, screenWidth, screenHeight);
+	if (!result)
+	{
+		MessageBox(m_hwnd, L"Could not initialize the input object.", L"Error", MB_OK);
+		return false;
+	}
 
 	// Create the graphics object.  This object will handle rendering all the graphics for this application.
 	m_Graphics = new GraphicsClass;
@@ -45,11 +52,47 @@ bool SystemClass::Initialize()
 		return false;
 	}
 
+	// Create the timer object.
+	m_Timer = new TimerClass;
+	if (!m_Timer)
+	{
+		return false;
+	}
+
+	// Initialize the timer object.
+	result = m_Timer->Initialize();
+	if (!result)
+	{
+		MessageBox(m_hwnd, L"Could not initialize the Timer object.", L"Error", MB_OK);
+		return false;
+	}
+
+	// Create the position object.
+	m_Position = new PositionClass;
+	if (!m_Position)
+	{
+		return false;
+	}
+
 	return true;
 }
 
 void SystemClass::Shutdown()
 {
+	// Release the position object.
+	if (m_Position)
+	{
+		delete m_Position;
+		m_Position = 0;
+	}
+
+	// Release the timer object.
+	if (m_Timer)
+	{
+		delete m_Timer;
+		m_Timer = 0;
+	}
+
 	// Release the graphics object.
 	if (m_Graphics)
 	{
@@ -111,16 +154,41 @@ void SystemClass::Run()
 
 bool SystemClass::Frame()
 {
-	bool result;
+	bool keyDown, result;
+	float rotationY;
 
-	// Check if the user pressed escape and wants to exit the application.
-	if (m_Input->IsKeyDown(VK_ESCAPE))
+	// Update the system stats.
+	m_Timer->Frame();
+
+	// Do the input frame processing.
+	result = m_Input->Frame();
+	if (!result)
 	{
 		return false;
 	}
 
+	// Set the frame time for calculating the updated position.
+	m_Position->SetFrameTime(m_Timer->GetTime());
+
+	// Check if the left or right arrow key has been pressed, if so rotate the camera accordingly.
+	keyDown = m_Input->IsLeftArrowPressed();
+	m_Position->TurnLeft(keyDown);
+
+	keyDown = m_Input->IsRightArrowPressed();
+	m_Position->TurnRight(keyDown);
+
+	// Get the current view point rotation.
+	m_Position->GetRotation(rotationY);
+
 	// Do the frame processing for the graphics object.
-	result = m_Graphics->Frame();
+	result = m_Graphics->Frame(rotationY);
+	if (!result)
+	{
+		return false;
+	}
+
+	// Finally render the graphics to the screen.
+	result = m_Graphics->Render();
 	if (!result)
 	{
 		return false;
@@ -133,20 +201,6 @@ LRESULT CALLBACK SystemClass::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam
 {
 	switch (umsg)
 	{
-			// Check if a key has been pressed on the keyboard
-		case WM_KEYDOWN:
-		{
-			// if a key is pressed send it to the input object so it can record that state.
-			m_Input->IsKeyDown((unsigned int)wparam);
-			return 0;
-		}
-		// Check if a key is released on the keyboard
-		case WM_KEYUP:
-		{
-			// If akey is released then send it to the input object so it can unset the state for that key.
-			m_Input->KeyUp((unsigned int)wparam);
-			return 0;
-		}
 		// Any other messages send to the default message handle as our application won't make use of them
 		default:
 		{

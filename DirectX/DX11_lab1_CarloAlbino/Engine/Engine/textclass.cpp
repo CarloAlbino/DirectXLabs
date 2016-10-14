@@ -6,8 +6,6 @@ TextClass::TextClass()
 	m_FontShader = 0;
 
 	m_sentence1 = 0;
-	m_sentence2 = 0;
-	m_sentence3 = 0;
 }
 
 TextClass::TextClass(const TextClass& other)
@@ -61,42 +59,14 @@ bool TextClass::Initialize(ID3D11Device* device, ID3D11DeviceContext* deviceCont
 	}
 
 	// Initialize the first sentence.
-	result = InitializeSentence(&m_sentence1, 16, device);
+	result = InitializeSentence(&m_sentence1, 32, device);
 	if (!result)
 	{
 		return false;
 	}
 
 	// Now update the sentence vertex buffer with the new string information.
-	result = UpdateSentence(m_sentence1, "Why are we here?", 100, 100, 1.0f, 1.0f, 1.0f, deviceContext);
-	if (!result)
-	{
-		return false;
-	}
-
-	// Initialize the first sentence.
-	result = InitializeSentence(&m_sentence2, 32, device);
-	if (!result)
-	{
-		return false;
-	}
-
-	// Now update the sentence vertex buffer with the new string information.
-	result = UpdateSentence(m_sentence2, "What is the meaning of life?", 100, 115, 0.5f, 0.5f, 0.5f, deviceContext);
-	if (!result)
-	{
-		return false;
-	}
-
-	// Initialize the third sentence.
-	result = InitializeSentence(&m_sentence3, 16, device);
-	if (!result)
-	{
-		return false;
-	}
-
-	// Now update the sentence vertex buffer with the new string information.
-	result = UpdateSentence(m_sentence3, "Why do we exist?", 100, 130, 0.3f, 0.3f, 0.3f, deviceContext);
+	result = UpdateSentence(m_sentence1, "Render Count: ", 20, 20, 1.0f, 1.0f, 1.0f, deviceContext);
 	if (!result)
 	{
 		return false;
@@ -109,12 +79,6 @@ void TextClass::Shutdown()
 {
 	// Release the first sentence.
 	ReleaseSentence(&m_sentence1);
-
-	// Release the second sentence.
-	ReleaseSentence(&m_sentence2);
-
-	// Release the third sentence.
-	ReleaseSentence(&m_sentence3);
 
 	// Release the font shader object.
 	if (m_FontShader)
@@ -147,15 +111,25 @@ bool TextClass::Render(ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatri
 		return false;
 	}
 
-	// Draw the second sentence.
-	result = RenderSentence(deviceContext, m_sentence2, worldMatrix, orthoMatrix);
-	if (!result)
-	{
-		return false;
-	}
+	return true;
+}
 
-	// Draw the third sentence.
-	result = RenderSentence(deviceContext, m_sentence3, worldMatrix, orthoMatrix);
+bool TextClass::SetRenderCount(int count, ID3D11DeviceContext* deviceContext)
+{
+	char tempString[32];
+	char countString[32];
+	bool result;
+
+
+	// Convert the count integer to string format.
+	_itoa_s(count, tempString, 10);
+
+	// Setup the render count string.
+	strcpy_s(countString, "Render Count: ");
+	strcat_s(countString, tempString);
+
+	// Update the sentence vertex buffer with the new string information.
+	result = UpdateSentence(m_sentence1, countString, 20, 20, 1.0f, 1.0f, 1.0f, deviceContext);
 	if (!result)
 	{
 		return false;

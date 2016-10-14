@@ -19,7 +19,6 @@ float4 FontPixelShader(PixelInputType input) : SV_TARGET
 {
     float4 color;
 	
-	
     // Sample the texture pixel at this location.
     color = shaderTexture.Sample(SampleType, input.tex);
 	

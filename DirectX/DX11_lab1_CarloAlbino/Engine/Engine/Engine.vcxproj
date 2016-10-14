@@ -151,16 +151,20 @@
     <ClCompile Include="d3dclass.cpp" />
     <ClCompile Include="fontclass.cpp" />
     <ClCompile Include="fontshaderclass.cpp" />
+    <ClCompile Include="frustumclass.cpp" />
     <ClCompile Include="graphicsclass.cpp" />
     <ClCompile Include="inputclass.cpp" />
     <ClCompile Include="lightclass.cpp" />
     <ClCompile Include="lightshaderclass.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="modelclass.cpp" />
+    <ClCompile Include="modellistclass.cpp" />
+    <ClCompile Include="positionclass.cpp" />
     <ClCompile Include="SystemClass.cpp" />
     <ClCompile Include="textclass.cpp" />
     <ClCompile Include="textureclass.cpp" />
     <ClCompile Include="textureshaderclass.cpp" />
+    <ClCompile Include="timerclass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bitmapclass.h" />
@@ -168,15 +172,19 @@
     <ClInclude Include="d3dclass.h" />
     <ClInclude Include="fontclass.h" />
     <ClInclude Include="fontshaderclass.h" />
+    <ClInclude Include="frustumclass.h" />
     <ClInclude Include="graphicsclass.h" />
     <ClInclude Include="inputclass.h" />
     <ClInclude Include="lightclass.h" />
     <ClInclude Include="lightshaderclass.h" />
     <ClInclude Include="modelclass.h" />
+    <ClInclude Include="modellistclass.h" />
+    <ClInclude Include="positionclass.h" />
     <ClInclude Include="systemclass.h" />
     <ClInclude Include="textclass.h" />
     <ClInclude Include="textureclass.h" />
     <ClInclude Include="textureshaderclass.h" />
+    <ClInclude Include="timerclass.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="font.ps" />
