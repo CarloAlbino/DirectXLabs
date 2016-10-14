@@ -186,6 +186,11 @@
     <None Include="texture.ps" />
     <None Include="texture.vs" />
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\..\..\..\..\..\..\Desktop\sprite_gs.hlsl" />
+    <FxCompile Include="..\..\..\..\..\..\..\Desktop\sprite_ps.hlsl" />
+    <FxCompile Include="..\..\..\..\..\..\..\Desktop\sprite_vs.hlsl" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

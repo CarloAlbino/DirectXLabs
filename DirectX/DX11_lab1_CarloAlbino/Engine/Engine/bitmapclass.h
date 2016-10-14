@@ -12,6 +12,15 @@
 class BitmapClass
 {
 private:
+	// Example Sprite Struct - Carlo
+	struct GuiElementVertexData
+	{
+		D3DXVECTOR2 position;
+		D3DXVECTOR2 size;
+		D3DXVECTOR4 color;
+		D3DXVECTOR4 source;
+	};
+
 	struct VertexType
 	{
 		D3DXVECTOR3 position;
