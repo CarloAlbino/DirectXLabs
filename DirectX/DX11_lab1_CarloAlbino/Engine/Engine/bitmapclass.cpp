@@ -115,7 +115,6 @@ void BitmapClass::ShutdownBuffers()
 
 bool BitmapClass::UpdateBuffers(ID3D11DeviceContext* deviceContext, int positionX, int positionY)
 {
-	float left, right, top, bottom;
 	GuiElementVertexData* guiVertices;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	GuiElementVertexData* guiVerticesPtr;
@@ -132,18 +131,6 @@ bool BitmapClass::UpdateBuffers(ID3D11DeviceContext* deviceContext, int position
 	m_previousPosX = positionX;
 	m_previousPosY = positionY;
 
-	// Calculate the screen coordinates of the left side of the bitmap.
-	left = (float)((m_screenWidth / 2) * -1) + (float)positionX;
-
-	// Calculate the screen coordinates of the right side of the bitmap.
-	right = left + (float)m_bitmapWidth;
-
-	// Calculate the screen coordinates of the top of the bitmap.
-	top = (float)(m_screenHeight / 2) - (float)positionY;
-
-	// Calculate the screen coordinates of the bottom of the bitmap.
-	bottom = top - (float)m_bitmapHeight;
-
 	// Create the vertex array.
 	guiVertices = new GuiElementVertexData();
 	if (!guiVertices)
@@ -151,7 +138,7 @@ bool BitmapClass::UpdateBuffers(ID3D11DeviceContext* deviceContext, int position
 		return false;
 	}
 
-	guiVertices->color = D3DXVECTOR4(1.f, 1.f, 1.f, 1.f);
+	guiVertices->color = D3DXVECTOR4(1.0f, 1.f, 1.f, 1.f);
 	guiVertices->size = D3DXVECTOR2((float)m_bitmapWidth / m_screenWidth * 2.f, (float)m_bitmapHeight / m_screenHeight * 2.f);
 	guiVertices->position = D3DXVECTOR2(2.f * 50.f / m_screenWidth - 1.f, 1.f - 2.f * 50.f / m_screenHeight);
 	guiVertices->source = D3DXVECTOR4(0.f, 1.f, 1.f, 0.f);
