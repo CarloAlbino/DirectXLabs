@@ -70,5 +70,8 @@
     <None Include="color.ps">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="color.hs">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

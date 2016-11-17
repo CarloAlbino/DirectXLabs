@@ -165,6 +165,7 @@
     <ClInclude Include="systemclass.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="color.hs" />
     <None Include="color.ps" />
     <None Include="color.vs" />
   </ItemGroup>
