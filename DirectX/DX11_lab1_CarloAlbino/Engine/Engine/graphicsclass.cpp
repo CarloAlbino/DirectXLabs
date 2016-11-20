@@ -142,9 +142,13 @@ bool GraphicsClass::Render()
 	D3DXMATRIX worldMatrix, viewMatrix, projectionMatrix;
 	bool result;
 
-
 	// Clear the buffers to begin the scene.
 	m_D3D->BeginScene(0.0f, 0.0f, 0.0f, 1.0f);
+
+	static float zPosScale;
+	zPosScale += 0.01f;
+	distancePercentage = abs(sinf(zPosScale));
+	m_Camera->SetPosition(0.0f, 0.0f, distancePercentage * -10.0f);
 
 	// Generate the view matrix based on the camera's position.
 	m_Camera->Render();
@@ -159,7 +163,7 @@ bool GraphicsClass::Render()
 
 	// Render the model using the color shader.
 	// Change the tessellation amount here
-	result = m_ColorShader->Render(m_D3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, 6.0f);
+	result = m_ColorShader->Render(m_D3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, 20.f - (distancePercentage * 20.f));
 	if (!result)
 	{
 		return false;

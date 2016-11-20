@@ -33,6 +33,8 @@ private:
 	CameraClass* m_Camera;
 	ModelClass* m_Model;
 	ColorShaderClass* m_ColorShader;
+
+	float distancePercentage;
 };
 
 #endif
