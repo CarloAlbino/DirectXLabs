@@ -5,7 +5,8 @@
 #include "d3dclass.h"
 #include "cameraclass.h"
 #include "modelclass.h"
-#include "multitextureshaderclass.h"
+#include "bumpmapshaderclass.h"
+#include "lightclass.h"
 
 // GLOBALS //
 const bool FULL_SCREEN = false;
@@ -31,7 +32,8 @@ private:
 	D3DClass* m_D3D;
 	CameraClass* m_Camera;
 	ModelClass* m_Model;
-	MultiTextureShaderClass* m_MultiTextureShader;
+	BumpMapShaderClass* m_BumpMapShader;
+	LightClass* m_Light;
 };
 
 #endif
