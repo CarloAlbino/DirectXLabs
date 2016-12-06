@@ -28,22 +28,26 @@ public:
 
 	bool Initialize(ID3D11Device*, ID3D11DeviceContext*, HWND, int, int, D3DXMATRIX);
 	void Shutdown();
-	bool Render(ID3D11DeviceContext*, D3DXMATRIX, D3DXMATRIX);
+	bool Render(ID3D11DeviceContext*, FontShaderClass*, D3DXMATRIX, D3DXMATRIX);
+
+	bool SetVideoCardInfo(char*, int, ID3D11DeviceContext*);
+	bool SetFps(int, ID3D11DeviceContext*);
+	bool SetCpu(int, ID3D11DeviceContext*);
+	bool SetCameraPosition(float, float, float, ID3D11DeviceContext*);
+	bool SetCameraRotation(float, float, float, ID3D11DeviceContext*);
 
 private:
 	bool InitializeSentence(SentenceType**, int, ID3D11Device*);
 	bool UpdateSentence(SentenceType*, char*, int, int, float, float, float, ID3D11DeviceContext*);
 	void ReleaseSentence(SentenceType**);
-	bool RenderSentence(ID3D11DeviceContext*, SentenceType*, D3DXMATRIX, D3DXMATRIX);
+	bool RenderSentence(SentenceType*, ID3D11DeviceContext*, FontShaderClass*, D3DXMATRIX, D3DXMATRIX);
 
 private:
-	FontClass* m_Font;
-	FontShaderClass* m_FontShader;
 	int m_screenWidth, m_screenHeight;
 	D3DXMATRIX m_baseViewMatrix;
-	SentenceType* m_sentence1;
-	SentenceType* m_sentence2;
-	SentenceType* m_sentence3;
+	FontClass* m_Font;
+	SentenceType *m_sentence1, *m_sentence2, *m_sentence3, *m_sentence4, *m_sentence5;
+	SentenceType *m_sentence6, *m_sentence7, *m_sentence8, *m_sentence9, *m_sentence10;
 };
 
 #endif

@@ -3,31 +3,40 @@
 TextClass::TextClass()
 {
 	m_Font = 0;
-	m_FontShader = 0;
-
 	m_sentence1 = 0;
 	m_sentence2 = 0;
 	m_sentence3 = 0;
+	m_sentence4 = 0;
+	m_sentence5 = 0;
+	m_sentence6 = 0;
+	m_sentence7 = 0;
+	m_sentence8 = 0;
+	m_sentence9 = 0;
+	m_sentence10 = 0;
 }
+
 
 TextClass::TextClass(const TextClass& other)
 {
 }
 
+
 TextClass::~TextClass()
 {
 }
+
 
 bool TextClass::Initialize(ID3D11Device* device, ID3D11DeviceContext* deviceContext, HWND hwnd, int screenWidth, int screenHeight,
 	D3DXMATRIX baseViewMatrix)
 {
 	bool result;
 
-	// Store the screen width and height.
+
+	// Store the screen width and height for calculating pixel location during the sentence updates.
 	m_screenWidth = screenWidth;
 	m_screenHeight = screenHeight;
 
-	// Store the base view matrix.
+	// Store the base view matrix for 2D text rendering.
 	m_baseViewMatrix = baseViewMatrix;
 
 	// Create the font object.
@@ -45,44 +54,15 @@ bool TextClass::Initialize(ID3D11Device* device, ID3D11DeviceContext* deviceCont
 		return false;
 	}
 
-	// Create the font shader object.
-	m_FontShader = new FontShaderClass;
-	if (!m_FontShader)
-	{
-		return false;
-	}
-
-	// Initialize the font shader object.
-	result = m_FontShader->Initialize(device, hwnd);
-	if (!result)
-	{
-		MessageBox(hwnd, L"Could not initialize the font shader object.", L"Error", MB_OK);
-		return false;
-	}
-
 	// Initialize the first sentence.
-	result = InitializeSentence(&m_sentence1, 16, device);
+	result = InitializeSentence(&m_sentence1, 150, device);
 	if (!result)
 	{
 		return false;
 	}
 
-	// Now update the sentence vertex buffer with the new string information.
-	result = UpdateSentence(m_sentence1, "Why are we here?", 100, 100, 1.0f, 1.0f, 1.0f, deviceContext);
-	if (!result)
-	{
-		return false;
-	}
-
-	// Initialize the first sentence.
+	// Initialize the second sentence.
 	result = InitializeSentence(&m_sentence2, 32, device);
-	if (!result)
-	{
-		return false;
-	}
-
-	// Now update the sentence vertex buffer with the new string information.
-	result = UpdateSentence(m_sentence2, "What is the meaning of life?", 100, 115, 0.5f, 0.5f, 0.5f, deviceContext);
 	if (!result)
 	{
 		return false;
@@ -95,8 +75,50 @@ bool TextClass::Initialize(ID3D11Device* device, ID3D11DeviceContext* deviceCont
 		return false;
 	}
 
-	// Now update the sentence vertex buffer with the new string information.
-	result = UpdateSentence(m_sentence3, "Why do we exist?", 100, 130, 0.3f, 0.3f, 0.3f, deviceContext);
+	// Initialize the fourth sentence.
+	result = InitializeSentence(&m_sentence4, 16, device);
+	if (!result)
+	{
+		return false;
+	}
+
+	// Initialize the fifth sentence.
+	result = InitializeSentence(&m_sentence5, 16, device);
+	if (!result)
+	{
+		return false;
+	}
+
+	// Initialize the sixth sentence.
+	result = InitializeSentence(&m_sentence6, 16, device);
+	if (!result)
+	{
+		return false;
+	}
+
+	// Initialize the seventh sentence.
+	result = InitializeSentence(&m_sentence7, 16, device);
+	if (!result)
+	{
+		return false;
+	}
+
+	// Initialize the eighth sentence.
+	result = InitializeSentence(&m_sentence8, 16, device);
+	if (!result)
+	{
+		return false;
+	}
+
+	// Initialize the ninth sentence.
+	result = InitializeSentence(&m_sentence9, 16, device);
+	if (!result)
+	{
+		return false;
+	}
+
+	// Initialize the tenth sentence.
+	result = InitializeSentence(&m_sentence10, 16, device);
 	if (!result)
 	{
 		return false;
@@ -105,25 +127,9 @@ bool TextClass::Initialize(ID3D11Device* device, ID3D11DeviceContext* deviceCont
 	return true;
 }
 
+
 void TextClass::Shutdown()
 {
-	// Release the first sentence.
-	ReleaseSentence(&m_sentence1);
-
-	// Release the second sentence.
-	ReleaseSentence(&m_sentence2);
-
-	// Release the third sentence.
-	ReleaseSentence(&m_sentence3);
-
-	// Release the font shader object.
-	if (m_FontShader)
-	{
-		m_FontShader->Shutdown();
-		delete m_FontShader;
-		m_FontShader = 0;
-	}
-
 	// Release the font object.
 	if (m_Font)
 	{
@@ -132,30 +138,83 @@ void TextClass::Shutdown()
 		m_Font = 0;
 	}
 
+	// Release the sentences.
+	ReleaseSentence(&m_sentence1);
+	ReleaseSentence(&m_sentence2);
+	ReleaseSentence(&m_sentence3);
+	ReleaseSentence(&m_sentence4);
+	ReleaseSentence(&m_sentence5);
+	ReleaseSentence(&m_sentence6);
+	ReleaseSentence(&m_sentence7);
+	ReleaseSentence(&m_sentence8);
+	ReleaseSentence(&m_sentence9);
+	ReleaseSentence(&m_sentence10);
+
 	return;
 }
 
-bool TextClass::Render(ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX orthoMatrix)
+
+bool TextClass::Render(ID3D11DeviceContext* deviceContext, FontShaderClass* FontShader, D3DXMATRIX worldMatrix, D3DXMATRIX orthoMatrix)
 {
 	bool result;
 
 
-	// Draw the first sentence.
-	result = RenderSentence(deviceContext, m_sentence1, worldMatrix, orthoMatrix);
+	// Draw the sentences.
+	result = RenderSentence(m_sentence1, deviceContext, FontShader, worldMatrix, orthoMatrix);
 	if (!result)
 	{
 		return false;
 	}
 
-	// Draw the second sentence.
-	result = RenderSentence(deviceContext, m_sentence2, worldMatrix, orthoMatrix);
+	result = RenderSentence(m_sentence2, deviceContext, FontShader, worldMatrix, orthoMatrix);
 	if (!result)
 	{
 		return false;
 	}
 
-	// Draw the third sentence.
-	result = RenderSentence(deviceContext, m_sentence3, worldMatrix, orthoMatrix);
+	result = RenderSentence(m_sentence3, deviceContext, FontShader, worldMatrix, orthoMatrix);
+	if (!result)
+	{
+		return false;
+	}
+
+	result = RenderSentence(m_sentence4, deviceContext, FontShader, worldMatrix, orthoMatrix);
+	if (!result)
+	{
+		return false;
+	}
+
+	result = RenderSentence(m_sentence5, deviceContext, FontShader, worldMatrix, orthoMatrix);
+	if (!result)
+	{
+		return false;
+	}
+
+	result = RenderSentence(m_sentence6, deviceContext, FontShader, worldMatrix, orthoMatrix);
+	if (!result)
+	{
+		return false;
+	}
+
+	result = RenderSentence(m_sentence7, deviceContext, FontShader, worldMatrix, orthoMatrix);
+	if (!result)
+	{
+		return false;
+	}
+
+	result = RenderSentence(m_sentence8, deviceContext, FontShader, worldMatrix, orthoMatrix);
+	if (!result)
+	{
+		return false;
+	}
+
+	result = RenderSentence(m_sentence9, deviceContext, FontShader, worldMatrix, orthoMatrix);
+	if (!result)
+	{
+		return false;
+	}
+
+	result = RenderSentence(m_sentence10, deviceContext, FontShader, worldMatrix, orthoMatrix);
 	if (!result)
 	{
 		return false;
@@ -163,6 +222,7 @@ bool TextClass::Render(ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatri
 
 	return true;
 }
+
 
 bool TextClass::InitializeSentence(SentenceType** sentence, int maxLength, ID3D11Device* device)
 {
@@ -268,6 +328,7 @@ bool TextClass::InitializeSentence(SentenceType** sentence, int maxLength, ID3D1
 	return true;
 }
 
+
 bool TextClass::UpdateSentence(SentenceType* sentence, char* text, int positionX, int positionY, float red, float green, float blue,
 	ID3D11DeviceContext* deviceContext)
 {
@@ -277,6 +338,7 @@ bool TextClass::UpdateSentence(SentenceType* sentence, char* text, int positionX
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	VertexType* verticesPtr;
+
 
 	// Store the color of the sentence.
 	sentence->red = red;
@@ -332,6 +394,7 @@ bool TextClass::UpdateSentence(SentenceType* sentence, char* text, int positionX
 	return true;
 }
 
+
 void TextClass::ReleaseSentence(SentenceType** sentence)
 {
 	if (*sentence)
@@ -358,7 +421,8 @@ void TextClass::ReleaseSentence(SentenceType** sentence)
 	return;
 }
 
-bool TextClass::RenderSentence(ID3D11DeviceContext* deviceContext, SentenceType* sentence, D3DXMATRIX worldMatrix,
+
+bool TextClass::RenderSentence(SentenceType* sentence, ID3D11DeviceContext* deviceContext, FontShaderClass* FontShader, D3DXMATRIX worldMatrix,
 	D3DXMATRIX orthoMatrix)
 {
 	unsigned int stride, offset;
@@ -383,11 +447,220 @@ bool TextClass::RenderSentence(ID3D11DeviceContext* deviceContext, SentenceType*
 	pixelColor = D3DXVECTOR4(sentence->red, sentence->green, sentence->blue, 1.0f);
 
 	// Render the text using the font shader.
-	result = m_FontShader->Render(deviceContext, sentence->indexCount, worldMatrix, m_baseViewMatrix, orthoMatrix, m_Font->GetTexture(),
-		pixelColor);
+	result = FontShader->Render(deviceContext, sentence->indexCount, worldMatrix, m_baseViewMatrix, orthoMatrix, m_Font->GetTexture(), pixelColor);
 	if (!result)
 	{
 		false;
+	}
+
+	return true;
+}
+
+
+bool TextClass::SetVideoCardInfo(char* videoCardName, int videoCardMemory, ID3D11DeviceContext* deviceContext)
+{
+	char dataString[150];
+	bool result;
+	char tempString[16];
+	char memoryString[32];
+
+
+	// Setup the video card name string.
+	strcpy_s(dataString, "Video Card: ");
+	strcat_s(dataString, videoCardName);
+
+	// Update the sentence vertex buffer with the new string information.
+	result = UpdateSentence(m_sentence1, dataString, 10, 10, 1.0f, 1.0f, 1.0f, deviceContext);
+	if (!result)
+	{
+		return false;
+	}
+
+	// Truncate the memory value to prevent buffer over flow.
+	if (videoCardMemory > 9999999)
+	{
+		videoCardMemory = 9999999;
+	}
+
+	// Convert the video memory integer value to a string format.
+	_itoa_s(videoCardMemory, tempString, 10);
+
+	// Setup the video memory string.
+	strcpy_s(memoryString, "Video Memory: ");
+	strcat_s(memoryString, tempString);
+	strcat_s(memoryString, " MB");
+
+	// Update the sentence vertex buffer with the new string information.
+	result = UpdateSentence(m_sentence2, memoryString, 10, 30, 1.0f, 1.0f, 1.0f, deviceContext);
+	if (!result)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+
+bool TextClass::SetFps(int fps, ID3D11DeviceContext* deviceContext)
+{
+	char tempString[16];
+	char fpsString[16];
+	bool result;
+
+
+	// Truncate the fps to prevent a buffer over flow.
+	if (fps > 9999)
+	{
+		fps = 9999;
+	}
+
+	// Convert the fps integer to string format.
+	_itoa_s(fps, tempString, 10);
+
+	// Setup the fps string.
+	strcpy_s(fpsString, "Fps: ");
+	strcat_s(fpsString, tempString);
+
+	// Update the sentence vertex buffer with the new string information.
+	result = UpdateSentence(m_sentence3, fpsString, 10, 70, 0.0f, 1.0f, 0.0f, deviceContext);
+	if (!result)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+
+bool TextClass::SetCpu(int cpu, ID3D11DeviceContext* deviceContext)
+{
+	char tempString[16];
+	char cpuString[16];
+	bool result;
+
+
+	// Convert the cpu integer to string format.
+	_itoa_s(cpu, tempString, 10);
+
+	// Setup the cpu string.
+	strcpy_s(cpuString, "Cpu: ");
+	strcat_s(cpuString, tempString);
+	strcat_s(cpuString, "%");
+
+	// Update the sentence vertex buffer with the new string information.
+	result = UpdateSentence(m_sentence4, cpuString, 10, 90, 0.0f, 1.0f, 0.0f, deviceContext);
+	if (!result)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+
+bool TextClass::SetCameraPosition(float posX, float posY, float posZ, ID3D11DeviceContext* deviceContext)
+{
+	int positionX, positionY, positionZ;
+	char tempString[16];
+	char dataString[16];
+	bool result;
+
+
+	// Convert the position from floating point to integer.
+	positionX = (int)posX;
+	positionY = (int)posY;
+	positionZ = (int)posZ;
+
+	// Truncate the position if it exceeds either 9999 or -9999.
+	if (positionX > 9999) { positionX = 9999; }
+	if (positionY > 9999) { positionY = 9999; }
+	if (positionZ > 9999) { positionZ = 9999; }
+
+	if (positionX < -9999) { positionX = -9999; }
+	if (positionY < -9999) { positionY = -9999; }
+	if (positionZ < -9999) { positionZ = -9999; }
+
+	// Setup the X position string.
+	_itoa_s(positionX, tempString, 10);
+	strcpy_s(dataString, "X: ");
+	strcat_s(dataString, tempString);
+
+	result = UpdateSentence(m_sentence5, dataString, 10, 130, 0.0f, 1.0f, 0.0f, deviceContext);
+	if (!result)
+	{
+		return false;
+	}
+
+	// Setup the Y position string.
+	_itoa_s(positionY, tempString, 10);
+	strcpy_s(dataString, "Y: ");
+	strcat_s(dataString, tempString);
+
+	result = UpdateSentence(m_sentence6, dataString, 10, 150, 0.0f, 1.0f, 0.0f, deviceContext);
+	if (!result)
+	{
+		return false;
+	}
+
+	// Setup the Z position string.
+	_itoa_s(positionZ, tempString, 10);
+	strcpy_s(dataString, "Z: ");
+	strcat_s(dataString, tempString);
+
+	result = UpdateSentence(m_sentence7, dataString, 10, 170, 0.0f, 1.0f, 0.0f, deviceContext);
+	if (!result)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+
+bool TextClass::SetCameraRotation(float rotX, float rotY, float rotZ, ID3D11DeviceContext* deviceContext)
+{
+	int rotationX, rotationY, rotationZ;
+	char tempString[16];
+	char dataString[16];
+	bool result;
+
+
+	// Convert the rotation from floating point to integer.
+	rotationX = (int)rotX;
+	rotationY = (int)rotY;
+	rotationZ = (int)rotZ;
+
+	// Setup the X rotation string.
+	_itoa_s(rotationX, tempString, 10);
+	strcpy_s(dataString, "rX: ");
+	strcat_s(dataString, tempString);
+
+	result = UpdateSentence(m_sentence8, dataString, 10, 210, 0.0f, 1.0f, 0.0f, deviceContext);
+	if (!result)
+	{
+		return false;
+	}
+
+	// Setup the Y rotation string.
+	_itoa_s(rotationY, tempString, 10);
+	strcpy_s(dataString, "rY: ");
+	strcat_s(dataString, tempString);
+
+	result = UpdateSentence(m_sentence9, dataString, 10, 230, 0.0f, 1.0f, 0.0f, deviceContext);
+	if (!result)
+	{
+		return false;
+	}
+
+	// Setup the Z rotation string.
+	_itoa_s(rotationZ, tempString, 10);
+	strcpy_s(dataString, "rZ: ");
+	strcat_s(dataString, tempString);
+
+	result = UpdateSentence(m_sentence10, dataString, 10, 250, 0.0f, 1.0f, 0.0f, deviceContext);
+	if (!result)
+	{
+		return false;
 	}
 
 	return true;

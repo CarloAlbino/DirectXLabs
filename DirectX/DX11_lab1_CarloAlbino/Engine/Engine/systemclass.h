@@ -3,14 +3,13 @@
 #define _SYSTEMCLASS_H_
 // PRE-PROCESSING DIRECTIVES //
 #define WIN32_LEAN_AND_MEAN
-// INCLUDES //
-#include <windows.h>
-// MY CLASS INCLUDES //
-#include "inputclass.h"
-#include "graphicsclass.h"
 
-class SystemClass {
-public: 
+#include <windows.h>
+#include "applicationclass.h"
+
+class SystemClass
+{
+public:
 	SystemClass();
 	SystemClass(const SystemClass&);
 	~SystemClass();
@@ -30,10 +29,9 @@ private:
 	LPCWSTR m_applicationName;
 	HINSTANCE m_hinstance;
 	HWND m_hwnd;
-
-	InputClass* m_Input;
-	GraphicsClass* m_Graphics;
+	ApplicationClass* m_Application;
 };
+
 
 // FUNCTION PROTOTYPES //
 static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
