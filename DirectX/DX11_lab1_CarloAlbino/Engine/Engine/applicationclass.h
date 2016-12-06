@@ -19,6 +19,8 @@ const float SCREEN_NEAR = 0.1f;
 #include "cpuclass.h"
 #include "fontshaderclass.h"
 #include "textclass.h"
+#include "terrainshaderclass.h"
+#include "lightclass.h"
 
 class ApplicationClass
 {
@@ -47,6 +49,8 @@ private:
 	CpuClass* m_Cpu;
 	FontShaderClass* m_FontShader;
 	TextClass* m_Text;
+	TerrainShaderClass* m_TerrainShader;
+	LightClass* m_Light;
 };
 
 #endif
