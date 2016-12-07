@@ -12,7 +12,7 @@ const float SCREEN_NEAR = 0.1f;
 #include "d3dclass.h"
 #include "cameraclass.h"
 #include "terrainclass.h"
-#include "colorshaderclass.h"
+//#include "colorshaderclass.h"
 #include "timerclass.h"
 #include "positionclass.h"
 #include "fpsclass.h"
@@ -42,7 +42,7 @@ private:
 	D3DClass* m_Direct3D;
 	CameraClass* m_Camera;
 	TerrainClass* m_Terrain;
-	ColorShaderClass* m_ColorShader;
+	//ColorShaderClass* m_ColorShader;
 	TimerClass* m_Timer;
 	PositionClass* m_Position;
 	FpsClass* m_Fps;

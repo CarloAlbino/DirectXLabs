@@ -6,7 +6,7 @@ ApplicationClass::ApplicationClass()
 	m_Direct3D = 0;
 	m_Camera = 0;
 	m_Terrain = 0;
-	m_ColorShader = 0;
+	//m_ColorShader = 0;
 	m_Timer = 0;
 	m_Position = 0;
 	m_Fps = 0;
@@ -90,7 +90,7 @@ bool ApplicationClass::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWidt
 	}
 
 	// Initialize the terrain object.
-	result = m_Terrain->Initialize(m_Direct3D->GetDevice(), "../Engine/data/heightmap01.bmp");
+	result = m_Terrain->Initialize(m_Direct3D->GetDevice(), "../Engine/data/heightmap01.bmp", L"../Engine/data/dirt01.dds");
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the terrain object.", L"Error", MB_OK);
@@ -98,19 +98,19 @@ bool ApplicationClass::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWidt
 	}
 
 	// Create the color shader object.
-	m_ColorShader = new ColorShaderClass;
+	/*m_ColorShader = new ColorShaderClass;
 	if (!m_ColorShader)
 	{
 		return false;
-	}
+	}*/
 
 	// Initialize the color shader object.
-	result = m_ColorShader->Initialize(m_Direct3D->GetDevice(), hwnd);
+	/*result = m_ColorShader->Initialize(m_Direct3D->GetDevice(), hwnd);
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the color shader object.", L"Error", MB_OK);
 		return false;
-	}
+	}*/
 
 	// Create the timer object.
 	m_Timer = new TimerClass;
@@ -291,12 +291,12 @@ void ApplicationClass::Shutdown()
 	}
 
 	// Release the color shader object.
-	if (m_ColorShader)
+	/*if (m_ColorShader)
 	{
 		m_ColorShader->Shutdown();
 		delete m_ColorShader;
 		m_ColorShader = 0;
-	}
+	}*/
 
 	// Release the terrain object.
 	if (m_Terrain)
@@ -465,15 +465,15 @@ bool ApplicationClass::RenderGraphics()
 	m_Terrain->Render(m_Direct3D->GetDeviceContext());
 
 	// Render the model using the color shader.
-	result = m_ColorShader->Render(m_Direct3D->GetDeviceContext(), m_Terrain->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix);
+	/*result = m_ColorShader->Render(m_Direct3D->GetDeviceContext(), m_Terrain->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix);
 	if (!result)
 	{
 		return false;
-	}
+	}*/
 
 	// Render the terrain using the terrain shader.
 	result = m_TerrainShader->Render(m_Direct3D->GetDeviceContext(), m_Terrain->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
-		m_Light->GetAmbientColor(), m_Light->GetDiffuseColor(), m_Light->GetDirection());
+		m_Light->GetAmbientColor(), m_Light->GetDiffuseColor(), m_Light->GetDirection(), m_Terrain->GetTexture());
 	if (!result)
 	{
 		return false;
