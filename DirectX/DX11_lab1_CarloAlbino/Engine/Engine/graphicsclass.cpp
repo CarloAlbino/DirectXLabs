@@ -4,12 +4,14 @@ GraphicsClass::GraphicsClass()
 {
 	m_D3D = 0;
 	m_Camera = 0;
-	m_Model = 0;
-	m_LightShader = 0;
-	m_Light = 0;
-	m_TextureShader = 0;
-	m_Bitmap = 0;
-	m_Text = 0;
+	m_Model = 0;		//
+	m_LightShader = 0;	//
+	m_Light = 0;		//
+	m_TextureShader = 0;//
+	m_Bitmap = 0;		//
+	m_Text = 0;			//
+	m_ParticleShader = 0;
+	m_ParticleSystem = 0;
 }
 
 GraphicsClass::GraphicsClass(const GraphicsClass& other) {}
@@ -44,12 +46,41 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	}
 
 	// Set the initial position of the camera.
-	m_Camera->SetPosition(0.0f, 0.0f, -10.0f);
+	m_Camera->SetPosition(0.0f, -2.0f, -10.0f);
 
 	// Initialize a base view matrix with the camera for 2D user interface rendering.
 	//m_Camera->SetPosition(0.0f, 0.0f, -1.0f);
 	m_Camera->Render();
 	m_Camera->GetViewMatrix(baseViewMatrix);
+
+	// Create the particle shader object.
+	m_ParticleShader = new ParticleShaderClass;
+	if (!m_ParticleShader)
+	{
+		return false;
+	}
+
+	// Initialize the particle shader object.
+	result = m_ParticleShader->Initialize(m_D3D->GetDevice(), hwnd);
+	if (!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the particle shader object.", L"Error", MB_OK);
+		return false;
+	}
+
+	// Create the particle system object.
+	m_ParticleSystem = new ParticleSystemClass;
+	if (!m_ParticleSystem)
+	{
+		return false;
+	}
+
+	// Initialize the particle system object.
+	result = m_ParticleSystem->Initialize(m_D3D->GetDevice(), L"../Engine/data/star.dds");
+	if (!result)
+	{
+		return false;
+	}
 
 	// Create the text object.
 	m_Text = new TextClass;
@@ -153,7 +184,6 @@ void GraphicsClass::Shutdown()
 		m_Text = 0;
 	}
 
-
 	// Release the light object.
 	if (m_Light)
 	{
@@ -193,6 +223,22 @@ void GraphicsClass::Shutdown()
 		m_TextureShader = 0;
 	}
 
+	// Release the particle system object.
+	if (m_ParticleSystem)
+	{
+		m_ParticleSystem->Shutdown();
+		delete m_ParticleSystem;
+		m_ParticleSystem = 0;
+	}
+
+	// Release the particle shader object.
+	if (m_ParticleShader)
+	{
+		m_ParticleShader->Shutdown();
+		delete m_ParticleShader;
+		m_ParticleShader = 0;
+	}
+
 	// Release the camera object.
 	if (m_Camera)
 	{
@@ -209,7 +255,7 @@ void GraphicsClass::Shutdown()
 	return;
 }
 
-bool GraphicsClass::Frame()
+bool GraphicsClass::Frame(float frameTime)
 {
 	bool result;
 
@@ -221,6 +267,9 @@ bool GraphicsClass::Frame()
 	{
 		rotation -= 360.0f;
 	}
+
+	// Run the frame processing for the particle system.
+	m_ParticleSystem->Frame(frameTime, m_D3D->GetDeviceContext());
 
 	// REnder the graphics scene.
 	result = Render(rotation);
@@ -297,6 +346,23 @@ bool GraphicsClass::Render(float rotation)
 
 	// Turn the Z buffer back on now that all 2D rendering has completed.
 	m_D3D->TurnZBufferOn();
+
+	// Turn on alpha blending.
+	m_D3D->TurnOnAlphaBlending();
+
+	// Put the particle system vertex and index buffers on the graphics pipeline to prepare them for drawing.
+	m_ParticleSystem->Render(m_D3D->GetDeviceContext());
+
+	// Render the model using the texture shader.
+	result = m_ParticleShader->Render(m_D3D->GetDeviceContext(), m_ParticleSystem->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
+		m_ParticleSystem->GetTexture());
+	if (!result)
+	{
+		return false;
+	}
+
+	// Turn off alpha blending.
+	m_D3D->TurnOffAlphaBlending();
 
 	// Present the rendered scene to the screen.
 	m_D3D->EndScene();

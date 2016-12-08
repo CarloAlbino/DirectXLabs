@@ -10,6 +10,8 @@
 #include "bitmapclass.h"
 #include "textureshaderclass.h"
 #include "textclass.h"
+#include "particleshaderclass.h"
+#include "particlesystemclass.h"
 
 // GLOBALS //
 const bool FULL_SCREEN = false;
@@ -26,7 +28,7 @@ public:
 
 	bool Initialize(int, int, HWND);
 	void Shutdown();
-	bool Frame();
+	bool Frame(float);
 
 private:
 	bool Render(float);
@@ -40,6 +42,8 @@ private:
 	TextureShaderClass* m_TextureShader;
 	BitmapClass* m_Bitmap;
 	TextClass* m_Text;
+	ParticleShaderClass* m_ParticleShader;
+	ParticleSystemClass* m_ParticleSystem;
 };
 
 #endif
