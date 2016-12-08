@@ -261,12 +261,13 @@ bool GraphicsClass::Frame(float frameTime)
 
 	static float rotation = 0.0f;
 
-	// Update the rotation variable each frame.
+	// No rotation today
+	/*// Update the rotation variable each frame.
 	rotation += (float)D3DX_PI * 0.005f;
 	if (rotation > 360.0f)
 	{
 		rotation -= 360.0f;
-	}
+	}*/
 
 	// Run the frame processing for the particle system.
 	m_ParticleSystem->Frame(frameTime, m_D3D->GetDeviceContext());
@@ -299,7 +300,7 @@ bool GraphicsClass::Render(float rotation)
 	m_D3D->GetOrthoMatrix(orthoMatrix);
 	m_D3D->GetWorldMatrix(stationaryWorldMatrix);
 
-	// Rotate the world matrix by the rotation value so that the triangle will spin.
+	// Rotate the world matrix by the rotation value so that the model will spin.
 	D3DXMatrixRotationY(&worldMatrix, rotation);
 
 	// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
@@ -328,7 +329,7 @@ bool GraphicsClass::Render(float rotation)
 	}
 
 	// Put the bitmap vertex and index buffers on the graphics pipeline to prepare them for drawing.
-	result = m_Bitmap->Render(m_D3D->GetDeviceContext(), 450, 50);
+	result = m_Bitmap->Render(m_D3D->GetDeviceContext(), 450, 400);
 	if (!result)
 	{
 		return false;

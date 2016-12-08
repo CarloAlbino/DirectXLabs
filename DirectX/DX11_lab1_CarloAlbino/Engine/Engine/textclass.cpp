@@ -8,6 +8,7 @@ TextClass::TextClass()
 	m_sentence1 = 0;
 	m_sentence2 = 0;
 	m_sentence3 = 0;
+	m_sentence4 = 0;
 }
 
 TextClass::TextClass(const TextClass& other)
@@ -102,6 +103,20 @@ bool TextClass::Initialize(ID3D11Device* device, ID3D11DeviceContext* deviceCont
 		return false;
 	}
 
+	// Initialize the fourth sentence.
+	result = InitializeSentence(&m_sentence4, 16, device);
+	if (!result)
+	{
+		return false;
+	}
+
+	// Now update the sentence vertex buffer with the new string information.
+	result = UpdateSentence(m_sentence4, "Sequel", 100, 145, 0.3f, 1.0f, 1.0f, deviceContext);
+	if (!result)
+	{
+		return false;
+	}
+
 	return true;
 }
 
@@ -115,6 +130,9 @@ void TextClass::Shutdown()
 
 	// Release the third sentence.
 	ReleaseSentence(&m_sentence3);
+
+	// Release the fourth sentence.
+	ReleaseSentence(&m_sentence4);
 
 	// Release the font shader object.
 	if (m_FontShader)
@@ -161,6 +179,12 @@ bool TextClass::Render(ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatri
 		return false;
 	}
 
+	// Draw the fourth sentence.
+	result = RenderSentence(deviceContext, m_sentence4, worldMatrix, orthoMatrix);
+	if (!result)
+	{
+		return false;
+	}
 	return true;
 }
 

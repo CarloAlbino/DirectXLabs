@@ -8,6 +8,7 @@
 // MY CLASS INCLUDES //
 #include "inputclass.h"
 #include "graphicsclass.h"
+#include "timerclass.h"
 
 class SystemClass {
 public: 
@@ -33,6 +34,7 @@ private:
 
 	InputClass* m_Input;
 	GraphicsClass* m_Graphics;
+	TimerClass* m_Timer;
 };
 
 // FUNCTION PROTOTYPES //
